@@ -11,7 +11,7 @@ updateClock();
 
 async function loadWeather() {
   try {
-    const res = await fetch('/api/ha/weather');
+    const res = await fetch('api/ha/weather');
     const data = await res.json();
     if (data && data.state) {
       const temp = data.attributes?.temperature;
@@ -35,7 +35,7 @@ function monthBounds(d) {
 
 async function loadEvents() {
   const { gridStart, gridEnd } = monthBounds(viewDate);
-  const res = await fetch(`/api/events?start=${gridStart.toISOString()}&end=${gridEnd.toISOString()}`);
+  const res = await fetch(`api/events?start=${gridStart.toISOString()}&end=${gridEnd.toISOString()}`);
   eventsCache = await res.json();
   renderMonth();
   renderAgenda();
@@ -143,7 +143,7 @@ document.getElementById('close-settings').addEventListener('click', () => {
 });
 
 async function loadAccounts() {
-  const res = await fetch('/api/accounts');
+  const res = await fetch('api/accounts');
   const accounts = await res.json();
   const container = document.getElementById('accounts-list');
   container.innerHTML = '';
@@ -163,7 +163,7 @@ async function loadAccounts() {
     removeBtn.textContent = 'Remove';
     removeBtn.style.cssText = 'float:right;background:none;border:none;color:#ff6b6b;cursor:pointer;';
     removeBtn.addEventListener('click', async () => {
-      await fetch(`/api/accounts/${encodeURIComponent(acc.id)}`, { method: 'DELETE' });
+      await fetch(`api/accounts/${encodeURIComponent(acc.id)}`, { method: 'DELETE' });
       loadAccounts();
     });
     header.appendChild(removeBtn);
@@ -176,7 +176,7 @@ async function loadAccounts() {
       cb.type = 'checkbox';
       cb.checked = cal.selected;
       cb.addEventListener('change', async () => {
-        await fetch(`/api/accounts/${encodeURIComponent(acc.id)}/calendars/${encodeURIComponent(cal.id)}`, {
+        await fetch(`api/accounts/${encodeURIComponent(acc.id)}/calendars/${encodeURIComponent(cal.id)}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ selected: cb.checked })
@@ -199,7 +199,7 @@ document.getElementById('connect-account-btn').addEventListener('click', async (
   box.classList.remove('hidden');
   document.getElementById('device-flow-status').textContent = 'Starting...';
 
-  const res = await fetch('/auth/google/device/start', { method: 'POST' });
+  const res = await fetch('auth/google/device/start', { method: 'POST' });
   const flow = await res.json();
   if (flow.error) {
     document.getElementById('device-flow-status').textContent = `Error: ${flow.error}`;
@@ -211,7 +211,7 @@ document.getElementById('connect-account-btn').addEventListener('click', async (
   document.getElementById('device-flow-status').textContent = 'Waiting for you to authorize…';
 
   const poll = setInterval(async () => {
-    const statusRes = await fetch(`/auth/google/device/status?flow_id=${encodeURIComponent(flow.flow_id)}`);
+    const statusRes = await fetch(`auth/google/device/status?flow_id=${encodeURIComponent(flow.flow_id)}`);
     const status = await statusRes.json();
     if (status.status === 'connected') {
       clearInterval(poll);
