@@ -2,7 +2,7 @@ name: "Skylight Dashboard"
 version: "0.1.0"
 slug: "skylight_dashboard"
 description: "A Skylight-style family calendar dashboard: multiple Google Calendars, color-coded, with two-way Home Assistant integration."
-url: "https://github.com/virtualpj/skylight-dashboard"
+url: "https://github.com/virtualpj/HACalendar"
 arch:
   - aarch64
   - amd64
